@@ -3,3 +3,6 @@ dist/
 
 # Dependency directories
 node_modules/
+
+# api keys
+.env

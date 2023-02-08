@@ -1,7 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin =
+//   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
@@ -14,7 +15,7 @@ module.exports = {
     clean: true,
     assetModuleFilename: "[name][ext]",
   },
-  devtool: "source-map",
+  // devtool: "source-map",
   devServer: {
     static: {
       directory: path.resolve(__dirname, "dist"),
@@ -22,6 +23,7 @@ module.exports = {
     port: 3000,
     open: true,
     hot: true,
+    watchFiles: ["./index.html"],
     compress: true,
     historyApiFallback: true,
   },
@@ -54,6 +56,7 @@ module.exports = {
       filename: "index.html",
       template: "index.html",
     }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
+    new Dotenv(),
   ],
 };
