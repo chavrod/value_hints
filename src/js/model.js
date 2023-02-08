@@ -48,13 +48,16 @@ export const loadGeneralData = async (query) => {
 
     const data = await res.json();
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    if (Object.keys(data).length === 0)
+      throw new Error(
+        `Company with a ticker symbol of ${query} does not exist!`
+      );
 
     state.generalInfo = createGeneralInfo(data);
     state.currentPriceRatios = createCurrentPriceRatios(data);
 
     console.log(state);
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 };
