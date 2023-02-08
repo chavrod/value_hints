@@ -7,8 +7,52 @@
   <title>Value Search</title>
 </head>
 <body>
-  <div>
-    <h3 class="text-blue-600/100" >Value Investing Dashboard</h3>
-  </div>
+  <nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+    <div class="flex items-center flex-shrink-0 text-white mr-6">
+      <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/></svg>
+      <span class="font-semibold text-xl tracking-tight">Value Search</span>
+    </div>
+    <form class="flex items-center">
+      <div class="mb-4">
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Stock ticker">
+      </div>
+      <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Search
+        </button>
+      </div>
+    </form>
+  </nav>
+  <section data-page="overview">
+    <section data-page="general">
+      <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="overflow-hidden">
+              <table class="min-w-full text-center">
+                <thead class="border-b bg-white">
+                  <tr>
+                    <th colspan="2" class="text-sm font-medium text-gray-900 px-6 py-2">
+                      First
+                    </th>
+                  </tr>
+                </thead class="border-b">
+                <tbody>
+                  <tr class="bg-white border-b">
+                    <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                      1
+                    </td>
+                    <td class="text-sm text-gray-900 font-light px-6 py-2 whitespace-nowrap">
+                      Marks
+                    </td>
+                  </tr class="bg-white border-b">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
 </body>
 </html>
