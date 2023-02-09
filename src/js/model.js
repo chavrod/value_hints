@@ -1,3 +1,5 @@
+import * as dataFormatter from "./helpers/dataFormatter";
+
 export const state = {
   generalInfo: {
     tableName: "General Info",
@@ -16,8 +18,14 @@ const createGeneralInfo = (data) => {
     exchange: { name: "Exchange", value: data.Exchange },
     ticker: { name: "Ticker", value: data.Symbol },
     name: { name: "Company Name", value: data.Name },
-    sector: { name: "Sector", value: data.Sector },
-    subsector: { name: "Subsector", value: data.Industry },
+    sector: {
+      name: "Sector",
+      value: dataFormatter.capitaliseFirstLetter(data.Sector),
+    },
+    subsector: {
+      name: "Subsector",
+      value: dataFormatter.capitaliseFirstLetter(data.Industry, false),
+    },
     currency: { name: "Currency", value: data.Currency },
     fiscalYearEnd: { name: "Fiscal Year End", value: data.FiscalYearEnd },
   };
