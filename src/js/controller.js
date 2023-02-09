@@ -1,6 +1,7 @@
 import "../style.css";
 import * as model from "./model";
 import searchView from "./views/searchView";
+import tableView from "./views/tableView";
 
 const controlSearchResults = async () => {
   try {
@@ -12,6 +13,8 @@ const controlSearchResults = async () => {
     // 3) Load search results
     await model.loadGeneralData(query);
     // 4) Render results
+    tableView.render(model.state.currentPriceRatios);
+    tableView.render(model.state.generalInfo);
   } catch (err) {
     console.log(err);
   }

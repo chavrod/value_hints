@@ -1,6 +1,14 @@
 export const state = {
-  generalInfo: {},
-  currentPriceRatios: {},
+  generalInfo: {
+    tableName: "General Info",
+    sectionTableName: "general-info",
+    values: {},
+  },
+  currentPriceRatios: {
+    tableName: "Price Ratios",
+    sectionTableName: "current-price-ratios",
+    values: {},
+  },
 };
 
 const createGeneralInfo = (data) => {
@@ -12,7 +20,6 @@ const createGeneralInfo = (data) => {
     subsector: { name: "Subsector", value: data.Industry },
     currency: { name: "Currency", value: data.Currency },
     fiscalYearEnd: { name: "Fiscal Year End", value: data.FiscalYearEnd },
-    description: { name: "Description", value: data.Description },
   };
 };
 
@@ -73,10 +80,8 @@ export const loadGeneralData = async (query) => {
         `Company with a ticker symbol of ${query} does not exist!`
       );
 
-    state.generalInfo = createGeneralInfo(data);
-    state.currentPriceRatios = createCurrentPriceRatios(data);
-
-    console.log(state);
+    state.generalInfo.values = createGeneralInfo(data);
+    state.currentPriceRatios.values = createCurrentPriceRatios(data);
   } catch (err) {
     throw err;
   }
