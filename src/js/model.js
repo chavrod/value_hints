@@ -1,4 +1,5 @@
 import * as dataFormatter from "./helpers/dataFormatter";
+import * as alphaVantageApi from "./api/alphaVantageApi";
 
 export const state = {
   generalInfo: {
@@ -84,19 +85,21 @@ const createCurrentPriceRatios = (data) => {
 
 export const loadGeneralData = async (query) => {
   try {
-    const res = await fetch(
-      `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${query}&apikey=${process.env.API_KEY}`
-    );
-
-    const data = await res.json();
+    const data = await Promise.all([
+      alphaVantageApi.loadData("OVERVIEW", query),
+      alphaVantageApi.loadData("INCOME_STATEMENT", query),
+      alphaVantageApi.loadData("BALANCE_SHEET", query),
+      alphaVantageApi.loadData("CASH_FLOW", query),
+    ]);
+    console.log(data);
 
     if (Object.keys(data).length === 0)
       throw new Error(
         `Company with a ticker symbol of ${query} does not exist!`
       );
 
-    state.generalInfo.values = createGeneralInfo(data);
-    state.currentPriceRatios.values = createCurrentPriceRatios(data);
+    state.generalInfo.values = createGeneralInfo(data[0]);
+    state.currentPriceRatios.values = createCurrentPriceRatios(data[0]);
   } catch (err) {
     throw err;
   }
