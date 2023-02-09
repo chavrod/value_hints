@@ -39,10 +39,17 @@ const createCurrentPriceRatios = (data) => {
         (data.MarketCapitalization / data.SharesOutstanding).toFixed(1)
       ),
     },
-    marketCap: { name: "Market Cap", value: +data.MarketCapitalization },
+    marketCap: {
+      name: "Market Cap",
+      value: +data.MarketCapitalization,
+      formattedValue: dataFormatter.formatLargeNumber(
+        +data.MarketCapitalization
+      ),
+    },
     sharesOutstanding: {
       name: "Shares Outstanding",
       value: +data.SharesOutstanding,
+      formattedValue: dataFormatter.formatLargeNumber(+data.SharesOutstanding),
     },
     priceToEarnings: {
       name: "P/E",
