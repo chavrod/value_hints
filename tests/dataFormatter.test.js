@@ -34,3 +34,21 @@ describe("format a large number", () => {
     expect(dataFormatter.formatLargeNumber(1556)).toBe("1.56K");
   });
 });
+
+describe.only("takes in a number a returns a string with a specified sign appended/preppended", () => {
+  test("Appends percentage", () => {
+    expect(dataFormatter.appendSign(2.55, "%", true)).toBe("2.55%");
+  });
+
+  test("Appends currency", () => {
+    expect(dataFormatter.appendSign(2.55, "$", true)).toBe("2.55$");
+  });
+
+  test("Prepends percentage", () => {
+    expect(dataFormatter.appendSign(2.55, "%", false)).toBe("%2.55");
+  });
+
+  test("Prepends currency", () => {
+    expect(dataFormatter.appendSign(2.55, "$", false)).toBe("$2.55");
+  });
+});

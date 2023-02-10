@@ -23,3 +23,7 @@ export const formatLargeNumber = (number) => {
     ? (Math.abs(Number(number)) / 1.0e3).toFixed(2) + "K"
     : Math.abs(Number(number));
 };
+
+export const appendSign = (number, sign, append = true) => {
+  return append ? number + sign : sign + number;
+};

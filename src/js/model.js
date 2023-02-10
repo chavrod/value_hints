@@ -39,6 +39,13 @@ const createCurrentPriceRatios = (data) => {
       value: parseFloat(
         (data.MarketCapitalization / data.SharesOutstanding).toFixed(1)
       ),
+      formattedValue: dataFormatter.appendSign(
+        parseFloat(
+          (data.MarketCapitalization / data.SharesOutstanding).toFixed(1)
+        ),
+        "$",
+        false
+      ),
     },
     marketCap: {
       name: "Market Cap",
@@ -69,11 +76,24 @@ const createCurrentPriceRatios = (data) => {
           100
         ).toFixed(2)
       ),
+      formattedValue: dataFormatter.appendSign(
+        parseFloat(
+          (
+            (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) *
+            100
+          ).toFixed(2)
+        ),
+        "%"
+      ),
     },
     dividendPerShare: { name: "DPS", value: +data.DividendPerShare },
     dividendYield: {
       name: "Dividend Yield",
       value: parseFloat((data.DividendYield * 100).toFixed(2)),
+      formattedValue: dataFormatter.appendSign(
+        parseFloat((data.DividendYield * 100).toFixed(2)),
+        "%"
+      ),
     },
     priceToBook: {
       name: "P/B",
