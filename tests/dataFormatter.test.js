@@ -20,22 +20,33 @@ describe("capitalise a string", () => {
   });
 });
 
-describe("format a large number", () => {
+describe.only("format a large number", () => {
   test("Trillion to two decimals", () => {
     expect(dataFormatter.formatLargeNumber(1556000000000)).toBe("1.56T");
   });
+
   test("Billion to two decimals", () => {
     expect(dataFormatter.formatLargeNumber(1556000000)).toBe("1.56B");
   });
+
   test("Million to two decimals", () => {
     expect(dataFormatter.formatLargeNumber(1556000)).toBe("1.56M");
   });
+
   test("Trillion to two decimals", () => {
     expect(dataFormatter.formatLargeNumber(1556)).toBe("1.56K");
   });
+
+  test("works with strings - thousands", () => {
+    expect(dataFormatter.formatLargeNumber("1556")).toBe("1.56K");
+  });
+
+  test("works with strings - trillions", () => {
+    expect(dataFormatter.formatLargeNumber("1556000000000")).toBe("1.56T");
+  });
 });
 
-describe.only("takes in a number a returns a string with a specified sign appended/preppended", () => {
+describe("takes in a number a returns a string with a specified sign appended/preppended", () => {
   test("Appends percentage", () => {
     expect(dataFormatter.appendSign(2.55, "%", true)).toBe("2.55%");
   });
