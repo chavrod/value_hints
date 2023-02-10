@@ -20,7 +20,11 @@ class tableView {
       <tr class="border-t-2 border-b-2 border-indigo-500 ">
         <td class="text-left text-sm px-2 py-1">${data.name}</td>
         <td class="text-right text-sm px-2 py-1">${
-          data.formattedValue || data.value
+          data.value === 0
+            ? "N/A"
+            : data.formattedValue
+            ? data.formattedValue
+            : data.value
         }</td>
       </tr>
     `;
