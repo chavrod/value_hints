@@ -1,3 +1,7 @@
+export const roundDecimals = (number, numDecimals) => {
+  return parseFloat((+number).toFixed(numDecimals));
+};
+
 export const capitaliseFirstLetter = (string, onlyFirstWord = true) => {
   const stringLowerTrim = string.toLowerCase().trim();
   return onlyFirstWord
