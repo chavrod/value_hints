@@ -1,5 +1,19 @@
 import * as dataFormatter from "../src/js/helpers/dataFormatter";
 
+describe.only("adjust a number to a specified number of decimal points", () => {
+  test("two decimals", () => {
+    expect(dataFormatter.roundDecimals(12.345, 2)).toBe(12.35);
+  });
+
+  test("two decimals + works with a string", () => {
+    expect(dataFormatter.roundDecimals("12.345", 2)).toBe(12.35);
+  });
+
+  test("three decimals", () => {
+    expect(dataFormatter.roundDecimals(1.0035, 3)).toBe(1.004);
+  });
+});
+
 describe("capitalise a string", () => {
   test("one word", () => {
     expect(dataFormatter.capitaliseFirstLetter("TEST")).toBe("Test");
@@ -20,7 +34,7 @@ describe("capitalise a string", () => {
   });
 });
 
-describe.only("format a large number", () => {
+describe("format a large number", () => {
   test("Trillion to two decimals", () => {
     expect(dataFormatter.formatLargeNumber(1556000000000)).toBe("1.56T");
   });
