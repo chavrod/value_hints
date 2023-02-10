@@ -1,4 +1,4 @@
-import * as dataFormatter from "./helpers/dataFormatter";
+import * as formatter from "./helpers/formatter";
 import * as alphaVantageApi from "./api/alphaVantageApi";
 
 export const state = {
@@ -21,11 +21,11 @@ const createGeneralInfo = (data) => {
     name: { name: "Company Name", value: data.Name },
     sector: {
       name: "Sector",
-      value: dataFormatter.capitaliseFirstLetter(data.Sector),
+      value: formatter.capitaliseFirstLetter(data.Sector),
     },
     subsector: {
       name: "Subsector",
-      value: dataFormatter.capitaliseFirstLetter(data.Industry, false),
+      value: formatter.capitaliseFirstLetter(data.Industry, false),
     },
     currency: { name: "Currency", value: data.Currency },
     fiscalYearEnd: { name: "Fiscal Year End", value: data.FiscalYearEnd },
@@ -36,12 +36,12 @@ const createCurrentPriceRatios = (data) => {
   return {
     price: {
       name: "Price",
-      value: dataFormatter.roundDecimals(
+      value: formatter.roundDecimals(
         data.MarketCapitalization / data.SharesOutstanding,
         2
       ),
-      formattedValue: dataFormatter.appendSign(
-        dataFormatter.roundDecimals(
+      formattedValue: formatter.appendSign(
+        formatter.roundDecimals(
           data.MarketCapitalization / data.SharesOutstanding,
           2
         ),
@@ -52,32 +52,30 @@ const createCurrentPriceRatios = (data) => {
     marketCap: {
       name: "Market Cap",
       value: +data.MarketCapitalization,
-      formattedValue: dataFormatter.formatLargeNumber(
-        +data.MarketCapitalization
-      ),
+      formattedValue: formatter.formatLargeNumber(+data.MarketCapitalization),
     },
     sharesOutstanding: {
       name: "Shares Outstanding",
       value: +data.SharesOutstanding,
-      formattedValue: dataFormatter.formatLargeNumber(+data.SharesOutstanding),
+      formattedValue: formatter.formatLargeNumber(+data.SharesOutstanding),
     },
     priceToEarnings: {
       name: "P/E",
-      value: dataFormatter.roundDecimals(data.PERatio, 2),
+      value: formatter.roundDecimals(data.PERatio, 2),
     },
     earningsPerShare: { name: "EPS", value: +data.EPS },
     priceToEarningsGrowth: {
       name: "PEG",
-      value: dataFormatter.roundDecimals(data.PEGRatio, 2),
+      value: formatter.roundDecimals(data.PEGRatio, 2),
     },
     earningsYield: {
       name: "Earnings Yield",
-      value: dataFormatter.roundDecimals(
+      value: formatter.roundDecimals(
         (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) * 100,
         2
       ),
-      formattedValue: dataFormatter.appendSign(
-        dataFormatter.roundDecimals(
+      formattedValue: formatter.appendSign(
+        formatter.roundDecimals(
           (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) *
             100,
           2
@@ -88,19 +86,19 @@ const createCurrentPriceRatios = (data) => {
     dividendPerShare: { name: "DPS", value: +data.DividendPerShare },
     dividendYield: {
       name: "Dividend Yield",
-      value: dataFormatter.roundDecimals(data.DividendYield * 100, 2),
-      formattedValue: dataFormatter.appendSign(
-        dataFormatter.roundDecimals(data.DividendYield * 100, 2),
+      value: formatter.roundDecimals(data.DividendYield * 100, 2),
+      formattedValue: formatter.appendSign(
+        formatter.roundDecimals(data.DividendYield * 100, 2),
         "%"
       ),
     },
     priceToBook: {
       name: "P/B",
-      value: dataFormatter.roundDecimals(data.PriceToBookRatio, 2),
+      value: formatter.roundDecimals(data.PriceToBookRatio, 2),
     },
     bookValue: {
       name: "BPS",
-      value: dataFormatter.roundDecimals(data.BookValue, 2),
+      value: formatter.roundDecimals(data.BookValue, 2),
     },
   };
 };
