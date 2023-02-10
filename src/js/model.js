@@ -36,12 +36,14 @@ const createCurrentPriceRatios = (data) => {
   return {
     price: {
       name: "Price",
-      value: parseFloat(
-        (data.MarketCapitalization / data.SharesOutstanding).toFixed(1)
+      value: dataFormatter.roundDecimals(
+        data.MarketCapitalization / data.SharesOutstanding,
+        2
       ),
       formattedValue: dataFormatter.appendSign(
-        parseFloat(
-          (data.MarketCapitalization / data.SharesOutstanding).toFixed(1)
+        dataFormatter.roundDecimals(
+          data.MarketCapitalization / data.SharesOutstanding,
+          2
         ),
         "$",
         false
@@ -61,27 +63,24 @@ const createCurrentPriceRatios = (data) => {
     },
     priceToEarnings: {
       name: "P/E",
-      value: parseFloat((+data.PERatio).toFixed(1)),
+      value: dataFormatter.roundDecimals(data.PERatio, 2),
     },
     earningsPerShare: { name: "EPS", value: +data.EPS },
     priceToEarningsGrowth: {
       name: "PEG",
-      value: parseFloat((+data.PEGRatio).toFixed(1)),
+      value: dataFormatter.roundDecimals(data.PEGRatio, 2),
     },
     earningsYield: {
       name: "Earnings Yield",
-      value: parseFloat(
-        (
-          (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) *
-          100
-        ).toFixed(2)
+      value: dataFormatter.roundDecimals(
+        (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) * 100,
+        2
       ),
       formattedValue: dataFormatter.appendSign(
-        parseFloat(
-          (
-            (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) *
-            100
-          ).toFixed(2)
+        dataFormatter.roundDecimals(
+          (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) *
+            100,
+          2
         ),
         "%"
       ),
@@ -89,17 +88,20 @@ const createCurrentPriceRatios = (data) => {
     dividendPerShare: { name: "DPS", value: +data.DividendPerShare },
     dividendYield: {
       name: "Dividend Yield",
-      value: parseFloat((data.DividendYield * 100).toFixed(2)),
+      value: dataFormatter.roundDecimals(data.DividendYield * 100, 2),
       formattedValue: dataFormatter.appendSign(
-        parseFloat((data.DividendYield * 100).toFixed(2)),
+        dataFormatter.roundDecimals(data.DividendYield * 100, 2),
         "%"
       ),
     },
     priceToBook: {
       name: "P/B",
-      value: parseFloat((+data.PriceToBookRatio).toFixed(1)),
+      value: dataFormatter.roundDecimals(data.PriceToBookRatio, 2),
     },
-    bookValue: { name: "BPS", value: parseFloat((+data.BookValue).toFixed(1)) },
+    bookValue: {
+      name: "BPS",
+      value: dataFormatter.roundDecimals(data.BookValue, 2),
+    },
   };
 };
 
