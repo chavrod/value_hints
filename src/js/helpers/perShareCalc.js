@@ -14,3 +14,12 @@ export const bpsArr = (equityArr, numSharesArr) => {
     formatter.roundDecimals(equityDataPoint / numSharesArr[index], 2)
   );
 };
+
+export const tbvpsArr = (equityArr, intangibleArr, numSharesArr) => {
+  return equityArr.map((equityDataPoint, index) =>
+    formatter.roundDecimals(
+      (equityDataPoint - intangibleArr[index]) / numSharesArr[index],
+      2
+    )
+  );
+};
