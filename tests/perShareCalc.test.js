@@ -37,3 +37,17 @@ describe("calcaute TBVPS for each arr position, rounding to 2 decimals", () => {
     ]);
   });
 });
+
+describe("calcaute FCF per share for each arr position, rounding to 2 decimals", () => {
+  test("Case 1 -> postive FCF", () => {
+    expect(perShareCalc.tbvpsArr([100, 150], [50, 50], [1000, 1000])).toEqual([
+      0.05, 0.1,
+    ]);
+  });
+
+  test("Case 2 -> Negative FCF", () => {
+    expect(perShareCalc.tbvpsArr([-100, -50], [50, 50], [1000, 1000])).toEqual([
+      -0.15, -0.1,
+    ]);
+  });
+});
