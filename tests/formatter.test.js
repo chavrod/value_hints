@@ -1,6 +1,6 @@
 import * as formatter from "../src/js/helpers/formatter";
 
-describe.only("adjust a number to a specified number of decimal points", () => {
+describe("adjust a number to a specified number of decimal points", () => {
   test("two decimals", () => {
     expect(formatter.roundDecimals(12.345, 2)).toBe(12.35);
   });
@@ -73,5 +73,25 @@ describe("takes in a number a returns a string with a specified sign appended/pr
 
   test("Prepends currency", () => {
     expect(formatter.appendSign(2.55, "$", false)).toBe("$2.55");
+  });
+});
+
+describe.only("reverses an array and replaces NaN strings with 0", () => {
+  test("All strings convert to numbers", () => {
+    expect(
+      formatter.formatHistoricData(
+        [{ inventory: "3" }, { inventory: "2" }, { inventory: "1" }],
+        "inventory"
+      )
+    ).toEqual([1, 2, 3]);
+  });
+
+  test("Some strigns convert to NaN", () => {
+    expect(
+      formatter.formatHistoricData(
+        [{ inventory: "test" }, { inventory: "2" }, { inventory: "1" }],
+        "inventory"
+      )
+    ).toEqual([1, 2, 0]);
   });
 });
