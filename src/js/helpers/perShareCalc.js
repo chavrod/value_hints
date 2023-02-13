@@ -8,3 +8,9 @@ export const epsArr = (incomeArr, prefDivArr, numSharesArr) => {
     )
   );
 };
+
+export const bpsArr = (equityArr, numSharesArr) => {
+  return equityArr.map((equityDataPoint, index) =>
+    formatter.roundDecimals(equityDataPoint / numSharesArr[index], 2)
+  );
+};
