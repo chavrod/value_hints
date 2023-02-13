@@ -1,4 +1,5 @@
 import * as formatter from "./helpers/formatter";
+import * as perShareCalc from "./helpers/perShareCalc";
 import * as alphaVantageApi from "./api/alphaVantageApi";
 
 export const state = {
@@ -231,12 +232,40 @@ export const loadGeneralData = async (query) => {
       data[3].annualReports
     );
 
-    console.log(state.yearlyStatementsData.cashFlow);
+    console.log(state.yearlyStatementsData.balanceSheet);
 
     localStorage.setItem("Statements", JSON.stringify(data[3]));
   } catch (err) {
     throw err;
   }
+};
+
+export const createHistoricRatios = (data) => {
+  state.yearlyRatios.perShare = createPerShareRatios(data);
+};
+
+const createPerShareRatios = (data) => {
+  return {
+    EPS: perShareCalc.epsArr(
+      data.income.netIncome,
+      data.cashFlow.dividendPayoutPreferred,
+      data.balanceSheet.sharesOutstanding
+    ),
+    BPS: perShareCalc.bpsArr(
+      data.balanceSheet.totalEquity,
+      data.balanceSheet.sharesOutstanding
+    ),
+    TBVPS: perShareCalc.tbvpsArr(
+      data.balanceSheet.totalEquity,
+      data.balanceSheet.intangibleAssets,
+      data.balanceSheet.sharesOutstanding
+    ),
+    FCFPS: perShareCalc.fcfpsArr(
+      data.cashFlow.operatingCashflow,
+      data.cashFlow.capitalExpenditures,
+      data.balanceSheet.sharesOutstanding
+    ),
+  };
 };
 
 const init = () => {

@@ -12,7 +12,12 @@ const controlSearchResults = async () => {
 
     // 3) Load search results
     await model.loadGeneralData(query);
-    // 4) Render results
+
+    // 4) Calculate Ratios
+    model.createHistoricRatios(model.state.yearlyStatementsData);
+
+    console.log(model.state.yearlyRatios.perShare);
+    // 5) Render results
     tableView.render(model.state.currentPriceRatios);
     tableView.render(model.state.generalInfo);
   } catch (err) {
