@@ -12,10 +12,17 @@ export const state = {
     sectionTableName: "current-price-ratios",
     values: {},
   },
-  incomeStatements: {},
-  yearlyIncomeData: {},
-  yearlyBalanceSheetData: {},
-  yearlyCashFlowData: {},
+  yearlyStatementsData: {
+    income: {},
+    balanceSheet: {},
+    cashFlow: {},
+  },
+  yearlyRatios: {
+    perShare: {},
+    returns: {},
+    cashFlow: {},
+    debtRelated: {},
+  },
 };
 
 const createGeneralInfo = (data) => {
@@ -112,16 +119,12 @@ export const createYearlyIncomeData = (data) => {
     years: data
       .map((statement) => statement.fiscalDateEnding.slice(0, 4))
       .reverse(),
-    totalRevenue: data.map((statement) => statement.totalRevenue).reverse(),
-    operatingIncome: data
-      .map((statement) => statement.operatingIncome)
-      .reverse(),
-    ebit: data.map((statement) => statement.ebit).reverse(),
-    ebitda: data.map((statement) => statement.ebitda).reverse(),
-    netIncome: data.map((statement) => statement.netIncome).reverse(),
-    interestExpense: data
-      .map((statement) => statement.interestExpense)
-      .reverse(),
+    totalRevenue: formatter.formatHistoricData(data, "totalRevenue"),
+    operatingIncome: formatter.formatHistoricData(data, "operatingIncome"),
+    ebit: formatter.formatHistoricData(data, "ebit"),
+    ebitda: formatter.formatHistoricData(data, "ebitda"),
+    netIncome: formatter.formatHistoricData(data, "netIncome"),
+    interestExpense: formatter.formatHistoricData(data, "interestExpense"),
   };
 };
 
@@ -131,30 +134,28 @@ export const createYearlyBalanceSheetData = (data) => {
       years: data
         .map((statement) => statement.fiscalDateEnding.slice(0, 4))
         .reverse(),
-      sharesOutstanding: data
-        .map((statement) => statement.commonStockSharesOutstanding)
-        .reverse(),
-      totalAssets: data.map((statement) => statement.totalAssets).reverse(),
-      intangibleAssets: data
-        .map((statement) => statement.intangibleAssets)
-        .reverse(),
-      totalCurrentAssets: data
-        .map((statement) => statement.totalCurrentAssets)
-        .reverse(),
-      inventory: data.map((statement) => statement.inventory).reverse(),
-      totalLiabilities: data
-        .map((statement) => statement.totalLiabilities)
-        .reverse(),
-      shortLongTermDebtTotal: data
-        .map((statement) => statement.shortLongTermDebtTotal)
-        .reverse(),
-      longTermDebt: data.map((statement) => statement.longTermDebt).reverse(),
-      totalCurrentLiabilities: data
-        .map((statement) => statement.totalCurrentLiabilities)
-        .reverse(),
-      totalEquity: data
-        .map((statement) => statement.totalShareholderEquity)
-        .reverse(),
+      sharesOutstanding: formatter.formatHistoricData(
+        data,
+        "commonStockSharesOutstanding"
+      ),
+      totalAssets: formatter.formatHistoricData(data, "totalAssets"),
+      intangibleAssets: formatter.formatHistoricData(data, "intangibleAssets"),
+      totalCurrentAssets: formatter.formatHistoricData(
+        data,
+        "totalCurrentAssets"
+      ),
+      inventory: formatter.formatHistoricData(data, "inventory"),
+      totalLiabilities: formatter.formatHistoricData(data, "totalLiabilities"),
+      shortLongTermDebtTotal: formatter.formatHistoricData(
+        data,
+        "shortLongTermDebtTotal"
+      ),
+      longTermDebt: formatter.formatHistoricData(data, "longTermDebt"),
+      totalCurrentLiabilities: formatter.formatHistoricData(
+        data,
+        "totalCurrentLiabilities"
+      ),
+      totalEquity: formatter.formatHistoricData(data, "totalShareholderEquity"),
     };
   }
 };
@@ -164,37 +165,41 @@ const createYearlyCashFlowData = (data) => {
     years: data
       .map((statement) => statement.fiscalDateEnding.slice(0, 4))
       .reverse(),
-    changeInInventory: data
-      .map((statement) => statement.changeInInventory)
-      .reverse(),
-    changeInOperatingAssets: data
-      .map((statement) => statement.changeInOperatingAssets)
-      .reverse(),
-    changeInOperatingLiabilities: data
-      .map((statement) => statement.changeInOperatingLiabilities)
-      .reverse(),
-    changeInReceivables: data
-      .map((statement) => statement.changeInReceivables)
-      .reverse(),
-    depreciationAndAmortization: data
-      .map((statement) => statement.depreciationDepletionAndAmortization)
-      .reverse(),
-    operatingCashflow: data
-      .map((statement) => statement.operatingCashflow)
-      .reverse(),
-    capitalExpenditures: data
-      .map((statement) => statement.capitalExpenditures)
-      .reverse(),
-    cashflowFromInvestment: data
-      .map((statement) => statement.cashflowFromInvestment)
-      .reverse(),
-    dividendPayout: data.map((statement) => statement.dividendPayout).reverse(),
-    dividendPayoutCommon: data
-      .map((statement) => statement.dividendPayoutCommonStock)
-      .reverse(),
-    dividendPayoutPreferred: data
-      .map((statement) => statement.dividendPayoutPreferredStock)
-      .reverse(),
+    changeInInventory: formatter.formatHistoricData(data, "changeInInventory"),
+    changeInOperatingAssets: formatter.formatHistoricData(
+      data,
+      "changeInOperatingAssets"
+    ),
+    changeInOperatingLiabilities: formatter.formatHistoricData(
+      data,
+      "changeInOperatingLiabilities"
+    ),
+    changeInReceivables: formatter.formatHistoricData(
+      data,
+      "changeInReceivables"
+    ),
+    depreciationAndAmortization: formatter.formatHistoricData(
+      data,
+      "depreciationDepletionAndAmortization"
+    ),
+    operatingCashflow: formatter.formatHistoricData(data, "operatingCashflow"),
+    capitalExpenditures: formatter.formatHistoricData(
+      data,
+      "capitalExpenditures"
+    ),
+    cashflowFromInvestment: formatter.formatHistoricData(
+      data,
+      "cashflowFromInvestment"
+    ),
+    dividendPayout: formatter.formatHistoricData(data, "dividendPayout"),
+    dividendPayoutCommon: formatter.formatHistoricData(
+      data,
+      "dividendPayoutCommonStock"
+    ),
+    dividendPayoutPreferred: formatter.formatHistoricData(
+      data,
+      "dividendPayoutPreferredStock"
+    ),
   };
 };
 
@@ -216,13 +221,17 @@ export const loadGeneralData = async (query) => {
     state.generalInfo.values = createGeneralInfo(data[0]);
     state.currentPriceRatios.values = createCurrentPriceRatios(data[0]);
 
-    state.yearlyIncomeData = createYearlyIncomeData(data[1].annualReports);
-    state.yearlyBalanceSheetData = createYearlyBalanceSheetData(
+    state.yearlyStatementsData.income = createYearlyIncomeData(
+      data[1].annualReports
+    );
+    state.yearlyStatementsData.balanceSheet = createYearlyBalanceSheetData(
       data[2].annualReports
     );
-    state.yearlyCashFlowData = createYearlyCashFlowData(data[3].annualReports);
+    state.yearlyStatementsData.cashFlow = createYearlyCashFlowData(
+      data[3].annualReports
+    );
 
-    console.log(state.yearlyCashFlowData);
+    console.log(state.yearlyStatementsData.cashFlow);
 
     localStorage.setItem("Statements", JSON.stringify(data[3]));
   } catch (err) {
