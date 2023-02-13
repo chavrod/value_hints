@@ -31,3 +31,11 @@ export const formatLargeNumber = (number) => {
 export const appendSign = (number, sign, append = true) => {
   return append ? number + sign : sign + number;
 };
+
+export const formatHistoricData = (dataArr, propertyName) => {
+  return dataArr
+    .map((statement) => {
+      return isNaN(+statement[propertyName]) ? 0 : +statement[propertyName];
+    })
+    .reverse();
+};
