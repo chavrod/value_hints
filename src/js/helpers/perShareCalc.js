@@ -25,11 +25,10 @@ export const tbvpsArr = (equityArr, intangibleArr, numSharesArr) => {
 };
 
 export const fcfpsArr = (operatingCashArr, capExpArr, numSharesArr) => {
-  return operatingCashArr.map(
-    (operatingCashDataPoint, index) =>
-      formatter.roundDecimals(
-        operatingCashDataPoint / capExpArr[index] / numSharesArr
-      ),
-    2
+  return operatingCashArr.map((operatingCashDataPoint, index) =>
+    formatter.roundDecimals(
+      (operatingCashDataPoint - capExpArr[index]) / numSharesArr[index],
+      2
+    )
   );
 };
