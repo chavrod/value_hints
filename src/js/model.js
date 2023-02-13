@@ -12,6 +12,10 @@ export const state = {
     sectionTableName: "current-price-ratios",
     values: {},
   },
+  incomeStatements: {},
+  yearlyIncomeData: {},
+  yearlyBalanceSheetData: {},
+  yearlyCashFlowData: {},
 };
 
 const createGeneralInfo = (data) => {
@@ -103,6 +107,97 @@ const createCurrentPriceRatios = (data) => {
   };
 };
 
+export const createYearlyIncomeData = (data) => {
+  return {
+    years: data
+      .map((statement) => statement.fiscalDateEnding.slice(0, 4))
+      .reverse(),
+    totalRevenue: data.map((statement) => statement.totalRevenue).reverse(),
+    operatingIncome: data
+      .map((statement) => statement.operatingIncome)
+      .reverse(),
+    ebit: data.map((statement) => statement.ebit).reverse(),
+    ebitda: data.map((statement) => statement.ebitda).reverse(),
+    netIncome: data.map((statement) => statement.netIncome).reverse(),
+    interestExpense: data
+      .map((statement) => statement.interestExpense)
+      .reverse(),
+  };
+};
+
+export const createYearlyBalanceSheetData = (data) => {
+  {
+    return {
+      years: data
+        .map((statement) => statement.fiscalDateEnding.slice(0, 4))
+        .reverse(),
+      sharesOutstanding: data
+        .map((statement) => statement.commonStockSharesOutstanding)
+        .reverse(),
+      totalAssets: data.map((statement) => statement.totalAssets).reverse(),
+      intangibleAssets: data
+        .map((statement) => statement.intangibleAssets)
+        .reverse(),
+      totalCurrentAssets: data
+        .map((statement) => statement.totalCurrentAssets)
+        .reverse(),
+      inventory: data.map((statement) => statement.inventory).reverse(),
+      totalLiabilities: data
+        .map((statement) => statement.totalLiabilities)
+        .reverse(),
+      shortLongTermDebtTotal: data
+        .map((statement) => statement.shortLongTermDebtTotal)
+        .reverse(),
+      longTermDebt: data.map((statement) => statement.longTermDebt).reverse(),
+      totalCurrentLiabilities: data
+        .map((statement) => statement.totalCurrentLiabilities)
+        .reverse(),
+      totalEquity: data
+        .map((statement) => statement.totalShareholderEquity)
+        .reverse(),
+    };
+  }
+};
+
+const createYearlyCashFlowData = (data) => {
+  return {
+    years: data
+      .map((statement) => statement.fiscalDateEnding.slice(0, 4))
+      .reverse(),
+    changeInInventory: data
+      .map((statement) => statement.changeInInventory)
+      .reverse(),
+    changeInOperatingAssets: data
+      .map((statement) => statement.changeInOperatingAssets)
+      .reverse(),
+    changeInOperatingLiabilities: data
+      .map((statement) => statement.changeInOperatingLiabilities)
+      .reverse(),
+    changeInReceivables: data
+      .map((statement) => statement.changeInReceivables)
+      .reverse(),
+    depreciationAndAmortization: data
+      .map((statement) => statement.depreciationDepletionAndAmortization)
+      .reverse(),
+    operatingCashflow: data
+      .map((statement) => statement.operatingCashflow)
+      .reverse(),
+    capitalExpenditures: data
+      .map((statement) => statement.capitalExpenditures)
+      .reverse(),
+    cashflowFromInvestment: data
+      .map((statement) => statement.cashflowFromInvestment)
+      .reverse(),
+    dividendPayout: data.map((statement) => statement.dividendPayout).reverse(),
+    dividendPayoutCommon: data
+      .map((statement) => statement.dividendPayoutCommonStock)
+      .reverse(),
+    dividendPayoutPreferred: data
+      .map((statement) => statement.dividendPayoutPreferredStock)
+      .reverse(),
+  };
+};
+
 export const loadGeneralData = async (query) => {
   try {
     const data = await Promise.all([
@@ -120,7 +215,25 @@ export const loadGeneralData = async (query) => {
 
     state.generalInfo.values = createGeneralInfo(data[0]);
     state.currentPriceRatios.values = createCurrentPriceRatios(data[0]);
+
+    state.yearlyIncomeData = createYearlyIncomeData(data[1].annualReports);
+    state.yearlyBalanceSheetData = createYearlyBalanceSheetData(
+      data[2].annualReports
+    );
+    state.yearlyCashFlowData = createYearlyCashFlowData(data[3].annualReports);
+
+    console.log(state.yearlyCashFlowData);
+
+    localStorage.setItem("Statements", JSON.stringify(data[3]));
   } catch (err) {
     throw err;
   }
 };
+
+const init = () => {
+  const storage = localStorage.getItem("Statements");
+  if (storage) state.incomeStatements = JSON.parse(storage);
+  console.log(state.incomeStatements);
+};
+
+init();
