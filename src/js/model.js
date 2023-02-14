@@ -1,5 +1,5 @@
 import * as formatter from "./helpers/formatter";
-import * as perShareCalc from "./helpers/perShareCalc";
+import * as ratioCalc from "./helpers/ratioCalc";
 import * as alphaVantageApi from "./api/alphaVantageApi";
 
 export const state = {
@@ -246,21 +246,21 @@ export const createHistoricRatios = (data) => {
 
 const createPerShareRatios = (data) => {
   return {
-    EPS: perShareCalc.epsArr(
+    EPS: ratioCalc.epsArr(
       data.income.netIncome,
       data.cashFlow.dividendPayoutPreferred,
       data.balanceSheet.sharesOutstanding
     ),
-    BPS: perShareCalc.bpsArr(
+    BPS: ratioCalc.bpsArr(
       data.balanceSheet.totalEquity,
       data.balanceSheet.sharesOutstanding
     ),
-    TBVPS: perShareCalc.tbvpsArr(
+    TBVPS: ratioCalc.tbvpsArr(
       data.balanceSheet.totalEquity,
       data.balanceSheet.intangibleAssets,
       data.balanceSheet.sharesOutstanding
     ),
-    FCFPS: perShareCalc.fcfpsArr(
+    FCFPS: ratioCalc.fcfpsArr(
       data.cashFlow.operatingCashflow,
       data.cashFlow.capitalExpenditures,
       data.balanceSheet.sharesOutstanding
