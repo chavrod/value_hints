@@ -32,3 +32,9 @@ export const fcfpsArr = (operatingCashArr, capExpArr, numSharesArr) => {
     )
   );
 };
+
+export const basic = (numeratorArr, denominatorArr) => {
+  return numeratorArr.map((numDataPoint, i) =>
+    formatter.roundDecimals(numDataPoint / denominatorArr[i], 2)
+  );
+};
