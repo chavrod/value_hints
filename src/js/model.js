@@ -49,13 +49,11 @@ const createCurrentPriceRatios = (data) => {
     price: {
       name: "Price",
       value: formatter.roundDecimals(
-        data.MarketCapitalization / data.SharesOutstanding,
-        2
+        data.MarketCapitalization / data.SharesOutstanding
       ),
       formattedValue: formatter.appendSign(
         formatter.roundDecimals(
-          data.MarketCapitalization / data.SharesOutstanding,
-          2
+          data.MarketCapitalization / data.SharesOutstanding
         ),
         "$",
         false
@@ -73,24 +71,22 @@ const createCurrentPriceRatios = (data) => {
     },
     priceToEarnings: {
       name: "P/E",
-      value: formatter.roundDecimals(data.PERatio, 2),
+      value: formatter.roundDecimals(data.PERatio),
     },
     earningsPerShare: { name: "EPS", value: +data.EPS },
     priceToEarningsGrowth: {
       name: "PEG",
-      value: formatter.roundDecimals(data.PEGRatio, 2),
+      value: formatter.roundDecimals(data.PEGRatio),
     },
     earningsYield: {
       name: "Earnings Yield",
       value: formatter.roundDecimals(
-        (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) * 100,
-        2
+        (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) * 100
       ),
       formattedValue: formatter.appendSign(
         formatter.roundDecimals(
           (data.EPS / (data.MarketCapitalization / data.SharesOutstanding)) *
-            100,
-          2
+            100
         ),
         "%"
       ),
@@ -98,9 +94,9 @@ const createCurrentPriceRatios = (data) => {
     dividendPerShare: { name: "DPS", value: +data.DividendPerShare },
     dividendYield: {
       name: "Dividend Yield",
-      value: formatter.roundDecimals(data.DividendYield * 100, 2),
+      value: formatter.roundDecimals(data.DividendYield * 100),
       formattedValue: formatter.appendSign(
-        formatter.roundDecimals(data.DividendYield * 100, 2),
+        formatter.roundDecimals(data.DividendYield * 100),
         "%"
       ),
     },
@@ -236,7 +232,7 @@ export const loadGeneralData = async (query) => {
       data[3].annualReports
     );
 
-    console.log(state.yearlyStatementsData.balanceSheet);
+    console.log(state.yearlyStatementsData.income);
 
     localStorage.setItem("Statements", JSON.stringify(data[3]));
   } catch (err) {
@@ -255,42 +251,44 @@ const createPerShareRatios = (data) => {
       data.income.netIncome,
       data.cashFlow.dividendPayoutPreferred,
       data.balanceSheet.sharesOutstanding
-    ),
-    BPS: calcRatio.basic(
-      data.balanceSheet.totalEquity,
-      data.balanceSheet.sharesOutstanding
-    ),
+    ).map((val) => formatter.roundDecimals(val)),
+    BPS: calcRatio
+      .basic(data.balanceSheet.totalEquity, data.balanceSheet.sharesOutstanding)
+      .map((val) => formatter.roundDecimals(val)),
     TBVPS: calcRatio.additionalNumeratorOperand["-"](
       data.balanceSheet.totalEquity,
       data.balanceSheet.intangibleAssets,
       data.balanceSheet.sharesOutstanding
-    ),
+    ).map((val) => formatter.roundDecimals(val)),
     FCFPS: calcRatio.additionalNumeratorOperand["-"](
       data.cashFlow.operatingCashflow,
       data.cashFlow.capitalExpenditures,
       data.balanceSheet.sharesOutstanding
-    ),
+    ).map((val) => formatter.roundDecimals(val)),
   };
 };
 
 const createRetunRatios = (data) => {
   return {
-    operatingMargin: calcRatio.basic(
-      data.income.operatingIncome,
-      data.income.totalRevenue
-    ),
-    ebitMargin: calcRatio.basic(data.income.ebit, data.income.totalRevenue),
+    operatingMargin: calcRatio
+      .basic(data.income.operatingIncome, data.income.totalRevenue)
+      .map((val) => formatter.roundDecimals(val)),
+    ebitMargin: calcRatio
+      .basic(data.income.ebit, data.income.totalRevenue)
+      .map((val) => formatter.roundDecimals(val)),
     ROE: calcRatio.additionalNumeratorOperand["-"](
       data.income.netIncome,
       data.cashFlow.dividendPayoutPreferred,
       data.balanceSheet.totalEquity
-    ),
-    ROA: calcRatio.basic(data.income.netIncome, data.balanceSheet.totalAssets),
+    ).map((val) => formatter.roundDecimals(val)),
+    ROA: calcRatio
+      .basic(data.income.netIncome, data.balanceSheet.totalAssets)
+      .map((val) => formatter.roundDecimals(val)),
     ROCE: calcRatio.additionalDenominatorOperand["+"](
       data.income.ebit,
       data.balanceSheet.totalEquity,
       data.balanceSheet.longTermLiabilities
-    ),
+    ).map((val) => formatter.roundDecimals(val)),
   };
 };
 
