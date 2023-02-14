@@ -1,4 +1,4 @@
-export const roundDecimals = (number, numDecimals) => {
+export const roundDecimals = (number, numDecimals = 2) => {
   return parseFloat((+number).toFixed(numDecimals));
 };
 
