@@ -1,40 +1,31 @@
-import * as formatter from "./formatter";
-
-export const epsArr = (incomeArr, prefDivArr, numSharesArr) => {
-  return incomeArr.map((incomeDataPoint, index) =>
-    formatter.roundDecimals(
-      (incomeDataPoint - prefDivArr[index]) / numSharesArr[index],
-      2
-    )
-  );
+export const basic = (numerArr, denomArr) => {
+  return numerArr.map((numDataPoint, i) => numDataPoint / denomArr[i]);
 };
 
-export const bpsArr = (equityArr, numSharesArr) => {
-  return equityArr.map((equityDataPoint, index) =>
-    formatter.roundDecimals(equityDataPoint / numSharesArr[index], 2)
-  );
+export const additionalNumeratorOperand = {
+  "+": function (firstNumerArr, secondNumerArr, denomArr) {
+    return firstNumerArr.map(
+      (firstNumVal, index) =>
+        (firstNumVal + secondNumerArr[index]) / denomArr[index]
+    );
+  },
+  "-": function (firstNumerArr, secondNumerArr, denomArr) {
+    return firstNumerArr.map(
+      (firstNumVal, index) =>
+        (firstNumVal - secondNumerArr[index]) / denomArr[index]
+    );
+  },
 };
 
-export const tbvpsArr = (equityArr, intangibleArr, numSharesArr) => {
-  return equityArr.map((equityDataPoint, index) =>
-    formatter.roundDecimals(
-      (equityDataPoint - intangibleArr[index]) / numSharesArr[index],
-      2
-    )
-  );
-};
-
-export const fcfpsArr = (operatingCashArr, capExpArr, numSharesArr) => {
-  return operatingCashArr.map((operatingCashDataPoint, index) =>
-    formatter.roundDecimals(
-      (operatingCashDataPoint - capExpArr[index]) / numSharesArr[index],
-      2
-    )
-  );
-};
-
-export const basic = (numeratorArr, denominatorArr) => {
-  return numeratorArr.map((numDataPoint, i) =>
-    formatter.roundDecimals(numDataPoint / denominatorArr[i], 2)
-  );
+export const additionalDenominatorOperand = {
+  "+": function (NumerArr, firstDenomArr, secondDenomArr) {
+    return NumerArr.map(
+      (NumVal, index) => NumVal / (firstDenomArr[index] + secondDenomArr[index])
+    );
+  },
+  "-": function (NumerArr, firstDenomArr, secondDenomArr) {
+    return NumerArr.map(
+      (NumVal, index) => NumVal / (firstDenomArr[index] - secondDenomArr[index])
+    );
+  },
 };

@@ -1,63 +1,62 @@
 import * as calcRatio from "../src/js/helpers/calcRatio";
+import { toBeDeepCloseTo } from "jest-matcher-deep-close-to";
 
-describe("calcaute EPS for each arr position, rounding to 2 decimals", () => {
-  test("Case 1 -> postive eps", () => {
-    expect(calcRatio.epsArr([10, 20], [5, 5], [1000, 1000])).toEqual([
-      0.01, 0.01,
-    ]);
-  });
+expect.extend({ toBeDeepCloseTo });
 
-  test("Case 2 -> Negative EPS", () => {
-    expect(calcRatio.epsArr([-10, -20], [5, 5], [1000, 1000])).toEqual([
-      -0.01, -0.03,
-    ]);
-  });
-});
-
-describe("calcaute BPS for each arr position, rounding to 2 decimals", () => {
-  test("Case 1 -> postive BPS", () => {
-    expect(calcRatio.bpsArr([50, 100], [200, 200])).toEqual([0.25, 0.5]);
-  });
-
-  test("Case 2 -> Negative BPS", () => {
-    expect(calcRatio.bpsArr([-50, -100], [200, 200])).toEqual([-0.25, -0.5]);
-  });
-});
-
-describe("calcaute TBVPS for each arr position, rounding to 2 decimals", () => {
-  test("Case 1 -> postive TBVPS", () => {
-    expect(calcRatio.tbvpsArr([200, 150], [50, 50], [1000, 1000])).toEqual([
-      0.15, 0.1,
-    ]);
-  });
-
-  test("Case 2 -> Negative TBVPS", () => {
-    expect(calcRatio.tbvpsArr([100, 50], [150, 150], [1000, 1000])).toEqual([
-      -0.05, -0.1,
-    ]);
-  });
-});
-
-describe("calcaute FCF per share for each arr position, rounding to 2 decimals", () => {
-  test("Case 1 -> postive FCF", () => {
-    expect(calcRatio.tbvpsArr([100, 150], [50, 50], [1000, 1000])).toEqual([
-      0.05, 0.1,
-    ]);
-  });
-
-  test("Case 2 -> Negative FCF", () => {
-    expect(calcRatio.tbvpsArr([-100, -50], [50, 50], [1000, 1000])).toEqual([
-      -0.15, -0.1,
-    ]);
-  });
-});
-
-describe.only("Divide values in one array by another and return result in an array, rounding to 2 decimals", () => {
+describe("Return an array of ratios between elements in two arrays with corresponding indexes", () => {
   test("Case 1 -> postive values", () => {
-    expect(calcRatio.basic([100, 150], [1000, 1000])).toEqual([0.1, 0.15]);
+    expect(calcRatio.basic([100, 150], [1000, 1000])).toBeDeepCloseTo([
+      0.1, 0.15,
+    ]);
   });
 
   test("Case 2 -> Negative values", () => {
-    expect(calcRatio.basic([-100, -150], [1000, 1000])).toEqual([-0.1, -0.15]);
+    expect(calcRatio.basic([-100, -150], [1000, 1000])).toBeDeepCloseTo([
+      -0.1, -0.15,
+    ]);
+  });
+});
+
+describe("Return an array of ratios between a resulting operation of elements in two numerator arrays and a denominator array with corresponding indexes", () => {
+  test("Addition sign", () => {
+    expect(
+      calcRatio.additionalNumeratorOperand["+"](
+        [100, 150],
+        [50, 50],
+        [1000, 1000]
+      )
+    ).toBeDeepCloseTo([0.15, 0.2]);
+  });
+
+  test("Subtraction sign", () => {
+    expect(
+      calcRatio.additionalNumeratorOperand["-"](
+        [100, 150],
+        [50, 50],
+        [1000, 1000]
+      )
+    ).toBeDeepCloseTo([0.05, 0.1]);
+  });
+});
+
+describe("Return an array of ratios between a numerator array and a resulting operation of elements in two denominator arrays with corresponding indexes", () => {
+  test("Addition sign", () => {
+    expect(
+      calcRatio.additionalDenominatorOperand["+"](
+        [100, 150],
+        [1000, 1000],
+        [50, 50]
+      )
+    ).toBeDeepCloseTo([0.1, 0.14]);
+  });
+
+  test("Subtraction sign", () => {
+    expect(
+      calcRatio.additionalDenominatorOperand["-"](
+        [100, 150],
+        [1000, 1000],
+        [50, 50]
+      )
+    ).toBeDeepCloseTo([0.11, 0.16]);
   });
 });
