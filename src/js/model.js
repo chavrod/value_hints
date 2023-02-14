@@ -19,10 +19,9 @@ export const state = {
     cashFlow: {},
   },
   yearlyRatios: {
-    perShare: {},
-    returns: {},
-    cashFlows: {},
-    debt: {},
+    perShareRelated: {},
+    returnRelated: {},
+    debtRelated: {},
   },
 };
 
@@ -241,8 +240,8 @@ export const loadGeneralData = async (query) => {
 };
 
 export const createHistoricRatios = (data) => {
-  state.yearlyRatios.perShare = createPerShareRatios(data);
-  state.yearlyRatios.returns = createRetunRatios(data);
+  state.yearlyRatios.perShareRelated = createPerShareRatios(data);
+  state.yearlyRatios.returnRelated = createRetunRatios(data);
 };
 
 const createPerShareRatios = (data) => {
@@ -289,6 +288,9 @@ const createRetunRatios = (data) => {
       data.balanceSheet.totalEquity,
       data.balanceSheet.longTermLiabilities
     ).map((val) => formatter.roundDecimals(val)),
+    cashConversion: calcRatio
+      .basic(data.cashFlow.operatingCashflow, data.income.netIncome)
+      .map((val) => formatter.roundDecimals(val)),
   };
 };
 
