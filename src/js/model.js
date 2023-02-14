@@ -242,6 +242,7 @@ export const loadGeneralData = async (query) => {
 export const createHistoricRatios = (data) => {
   state.yearlyRatios.perShareRelated = createPerShareRatios(data);
   state.yearlyRatios.returnRelated = createRetunRatios(data);
+  state.yearlyRatios.debtRelated = createDebtRatios(data);
 };
 
 const createPerShareRatios = (data) => {
@@ -290,6 +291,31 @@ const createRetunRatios = (data) => {
     ).map((val) => formatter.roundDecimals(val)),
     cashConversion: calcRatio
       .basic(data.cashFlow.operatingCashflow, data.income.netIncome)
+      .map((val) => formatter.roundDecimals(val)),
+  };
+};
+
+const createDebtRatios = (data) => {
+  return {
+    debtToEquity: calcRatio
+      .basic(data.balanceSheet.totalLiabilities, data.balanceSheet.totalEquity)
+      .map((val) => formatter.roundDecimals(val)),
+    debtToTotalAssets: calcRatio
+      .basic(data.balanceSheet.totalLiabilities, data.balanceSheet.totalAssets)
+      .map((val) => formatter.roundDecimals(val)),
+    currentRatio: calcRatio
+      .basic(
+        data.balanceSheet.totalCurrentAssets,
+        data.balanceSheet.totalCurrentLiabilities
+      )
+      .map((val) => formatter.roundDecimals(val)),
+    quickRatio: calcRatio.additionalNumeratorOperand["-"](
+      data.balanceSheet.totalCurrentAssets,
+      data.balanceSheet.inventory,
+      data.balanceSheet.totalCurrentLiabilities
+    ).map((val) => formatter.roundDecimals(val)),
+    interestCover: calcRatio
+      .basic(data.income.ebit, data.income.interestExpense)
       .map((val) => formatter.roundDecimals(val)),
   };
 };
