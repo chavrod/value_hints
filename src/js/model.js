@@ -1,5 +1,5 @@
 import * as formatter from "./helpers/formatter";
-import * as ratioCalc from "./helpers/ratioCalc";
+import * as calcRatio from "./helpers/calcRatio";
 import * as alphaVantageApi from "./api/alphaVantageApi";
 
 export const state = {
@@ -21,8 +21,8 @@ export const state = {
   yearlyRatios: {
     perShare: {},
     returns: {},
-    cashFlow: {},
-    debtRelated: {},
+    cashFlows: {},
+    debt: {},
   },
 };
 
@@ -147,6 +147,10 @@ export const createYearlyBalanceSheetData = (data) => {
       ),
       inventory: formatter.formatHistoricData(data, "inventory"),
       totalLiabilities: formatter.formatHistoricData(data, "totalLiabilities"),
+      longTermLiabilities: formatter.formatHistoricData(
+        data,
+        "totalNonCurrentLiabilities"
+      ),
       shortLongTermDebtTotal: formatter.formatHistoricData(
         data,
         "shortLongTermDebtTotal"
@@ -242,28 +246,50 @@ export const loadGeneralData = async (query) => {
 
 export const createHistoricRatios = (data) => {
   state.yearlyRatios.perShare = createPerShareRatios(data);
+  state.yearlyRatios.returns = createRetunRatios(data);
 };
 
 const createPerShareRatios = (data) => {
   return {
-    EPS: ratioCalc.epsArr(
+    EPS: calcRatio.additionalNumeratorOperand["-"](
       data.income.netIncome,
       data.cashFlow.dividendPayoutPreferred,
       data.balanceSheet.sharesOutstanding
     ),
-    BPS: ratioCalc.bpsArr(
+    BPS: calcRatio.basic(
       data.balanceSheet.totalEquity,
       data.balanceSheet.sharesOutstanding
     ),
-    TBVPS: ratioCalc.tbvpsArr(
+    TBVPS: calcRatio.additionalNumeratorOperand["-"](
       data.balanceSheet.totalEquity,
       data.balanceSheet.intangibleAssets,
       data.balanceSheet.sharesOutstanding
     ),
-    FCFPS: ratioCalc.fcfpsArr(
+    FCFPS: calcRatio.additionalNumeratorOperand["-"](
       data.cashFlow.operatingCashflow,
       data.cashFlow.capitalExpenditures,
       data.balanceSheet.sharesOutstanding
+    ),
+  };
+};
+
+const createRetunRatios = (data) => {
+  return {
+    operatingMargin: calcRatio.basic(
+      data.income.operatingIncome,
+      data.income.totalRevenue
+    ),
+    ebitMargin: calcRatio.basic(data.income.ebit, data.income.totalRevenue),
+    ROE: calcRatio.additionalNumeratorOperand["-"](
+      data.income.netIncome,
+      data.cashFlow.dividendPayoutPreferred,
+      data.balanceSheet.totalEquity
+    ),
+    ROA: calcRatio.basic(data.income.netIncome, data.balanceSheet.totalAssets),
+    ROCE: calcRatio.additionalDenominatorOperand["+"](
+      data.income.ebit,
+      data.balanceSheet.totalEquity,
+      data.balanceSheet.longTermLiabilities
     ),
   };
 };

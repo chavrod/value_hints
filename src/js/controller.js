@@ -16,7 +16,7 @@ const controlSearchResults = async () => {
     // 4) Calculate Ratios
     model.createHistoricRatios(model.state.yearlyStatementsData);
 
-    console.log(model.state.yearlyRatios.perShare);
+    console.log(model.state.yearlyRatios);
     // 5) Render results
     tableView.render(model.state.currentPriceRatios);
     tableView.render(model.state.generalInfo);
