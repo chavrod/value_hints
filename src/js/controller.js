@@ -1,7 +1,7 @@
 import "../style.css";
 import * as model from "./model";
 import searchView from "./views/searchView";
-import tableView from "./views/tableView";
+import generalTableView from "./views/generalTableView";
 
 const controlSearchResults = async () => {
   try {
@@ -19,10 +19,9 @@ const controlSearchResults = async () => {
     // 5) Calculate Compound Annual Growth Rates ->
     model.createGrowthRates();
 
-    console.log(model.state);
     // 6) Render results
-    tableView.render(model.state.currentPriceRatios);
-    tableView.render(model.state.generalInfo);
+    generalTableView.render(model.state.currentPriceRatios);
+    generalTableView.render(model.state.generalInfo);
   } catch (err) {
     console.log(err);
   }

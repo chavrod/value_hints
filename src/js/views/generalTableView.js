@@ -1,4 +1,4 @@
-class tableView {
+class generalTableView {
   #parentElement = document.querySelector("[data-page='overview']");
 
   render(data) {
@@ -44,4 +44,4 @@ class tableView {
   }
 }
 
-export default new tableView();
+export default new generalTableView();
