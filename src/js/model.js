@@ -248,6 +248,7 @@ export const createGrowthRates = () => {
   // 3 year CAGR
   // MAGIC NUMBER ALERT
   for (let key in state.yearlyRatios.perShareRelated) {
+    if (key === "years") return;
     state.yearlyRatios.perShareRelated[key].threeYrCAGR =
       formatter.roundDecimals(
         calcGrowth.compoundAnnual(
@@ -258,6 +259,7 @@ export const createGrowthRates = () => {
       );
   }
   for (let key in state.yearlyRatios.returnRelated) {
+    if (key === "years") return;
     state.yearlyRatios.returnRelated[key].threeYrCAGR = formatter.roundDecimals(
       calcGrowth.compoundAnnual(
         state.yearlyRatios.returnRelated[key].values,
@@ -269,6 +271,7 @@ export const createGrowthRates = () => {
 
   // 5 year CAGR
   for (let key in state.yearlyRatios.perShareRelated) {
+    if (key === "years") return;
     state.yearlyRatios.perShareRelated[key].fiveYrCAGR =
       formatter.roundDecimals(
         calcGrowth.compoundAnnual(
@@ -279,6 +282,7 @@ export const createGrowthRates = () => {
       );
   }
   for (let key in state.yearlyRatios.returnRelated) {
+    if (key === "years") return;
     state.yearlyRatios.returnRelated[key].fiveYrCAGR = formatter.roundDecimals(
       calcGrowth.compoundAnnual(
         state.yearlyRatios.returnRelated[key].values,
@@ -293,6 +297,7 @@ export const createGrowthRates = () => {
 
 const createPerShareRatios = (data) => {
   return {
+    years: data.income.years,
     EPS: {
       name: "EPS",
       values: calcRatio.additionalNumeratorOperand["-"](
@@ -331,6 +336,7 @@ const createPerShareRatios = (data) => {
 
 const createRetunRatios = (data) => {
   return {
+    years: data.income.years,
     operatingMargin: {
       name: "Operating Margin",
       values: calcRatio
@@ -376,6 +382,7 @@ const createRetunRatios = (data) => {
 
 const createDebtRatios = (data) => {
   return {
+    years: data.income.years,
     debtToEquity: {
       name: "Debt-to-Equity",
       values: calcRatio
