@@ -322,7 +322,7 @@ const createPerShareRatios = (data) => {
   return {
     years: data.income.values.years,
     EPS: {
-      name: "EPS",
+      name: "Earnings (EPS)",
       values: calcRatio.additionalNumeratorOperand["-"](
         data.income.values.netIncome,
         data.cashFlow.values.dividendPayoutPreferred,
@@ -330,7 +330,7 @@ const createPerShareRatios = (data) => {
       ).map((val) => formatter.roundDecimals(val)),
     },
     BPS: {
-      name: "BPS",
+      name: "Book Value (BPS)",
       values: calcRatio
         .basic(
           data.balanceSheet.values.totalEquity,
@@ -339,7 +339,7 @@ const createPerShareRatios = (data) => {
         .map((val) => formatter.roundDecimals(val)),
     },
     TBVPS: {
-      name: "EPS",
+      name: "Tangible Book Value",
       values: calcRatio.additionalNumeratorOperand["-"](
         data.balanceSheet.values.totalEquity,
         data.balanceSheet.values.intangibleAssets,
@@ -347,7 +347,7 @@ const createPerShareRatios = (data) => {
       ).map((val) => formatter.roundDecimals(val)),
     },
     FCFPS: {
-      name: "FCF per Share",
+      name: "Free Cash Flow",
       values: calcRatio.additionalNumeratorOperand["-"](
         data.cashFlow.values.operatingCashflow,
         data.cashFlow.values.capitalExpenditures,
