@@ -15,14 +15,38 @@ export const state = {
     values: {},
   },
   yearlyStatementsData: {
-    income: {},
-    balanceSheet: {},
-    cashFlow: {},
+    income: {
+      tableName: "Income",
+      sectionTableName: "income-statements",
+      values: {},
+    },
+    balanceSheet: {
+      tableName: "Balance Sheet",
+      sectionTableName: "balance-sheet-statements",
+      values: {},
+    },
+    cashFlow: {
+      tableName: "Cash Flow",
+      sectionTableName: "cash-flow-statements",
+      values: {},
+    },
   },
   yearlyRatios: {
-    perShareRelated: {},
-    returnRelated: {},
-    debtRelated: {},
+    perShareRelated: {
+      tableName: "Per Share Ratios",
+      sectionTableName: "per-share-ratios",
+      values: {},
+    },
+    returnRelated: {
+      tableName: "Profit-related Ratios",
+      sectionTableName: "profit-ratios",
+      values: {},
+    },
+    debtRelated: {
+      tableName: "Debt-related Ratios",
+      sectionTableName: "debt-ratios",
+      values: {},
+    },
   },
 };
 
@@ -221,13 +245,12 @@ export const loadGeneralData = async (query) => {
     state.generalInfo.values = createGeneralInfo(data[0]);
     state.currentPriceRatios.values = createCurrentPriceRatios(data[0]);
 
-    state.yearlyStatementsData.income = createYearlyIncomeData(
+    state.yearlyStatementsData.income.values = createYearlyIncomeData(
       data[1].annualReports
     );
-    state.yearlyStatementsData.balanceSheet = createYearlyBalanceSheetData(
-      data[2].annualReports
-    );
-    state.yearlyStatementsData.cashFlow = createYearlyCashFlowData(
+    state.yearlyStatementsData.balanceSheet.values =
+      createYearlyBalanceSheetData(data[2].annualReports);
+    state.yearlyStatementsData.cashFlow.values = createYearlyCashFlowData(
       data[3].annualReports
     );
 
@@ -239,96 +262,96 @@ export const loadGeneralData = async (query) => {
 };
 
 export const createHistoricRatios = (data) => {
-  state.yearlyRatios.perShareRelated = createPerShareRatios(data);
-  state.yearlyRatios.returnRelated = createRetunRatios(data);
-  state.yearlyRatios.debtRelated = createDebtRatios(data);
+  state.yearlyRatios.perShareRelated.values = createPerShareRatios(data);
+  state.yearlyRatios.returnRelated.values = createRetunRatios(data);
+  state.yearlyRatios.debtRelated.values = createDebtRatios(data);
 };
 
 export const createGrowthRates = () => {
   // 3 year CAGR
   // MAGIC NUMBER ALERT
-  for (let key in state.yearlyRatios.perShareRelated) {
+  for (let key in state.yearlyRatios.perShareRelated.values) {
     if (key === "years") return;
-    state.yearlyRatios.perShareRelated[key].threeYrCAGR =
+    state.yearlyRatios.perShareRelated.values[key].threeYrCAGR =
       formatter.roundDecimals(
         calcGrowth.compoundAnnual(
-          state.yearlyRatios.perShareRelated[key].values,
+          state.yearlyRatios.perShareRelated.values[key].values,
           3
         ),
         3
       );
   }
-  for (let key in state.yearlyRatios.returnRelated) {
+  for (let key in state.yearlyRatios.returnRelated.values) {
     if (key === "years") return;
-    state.yearlyRatios.returnRelated[key].threeYrCAGR = formatter.roundDecimals(
-      calcGrowth.compoundAnnual(
-        state.yearlyRatios.returnRelated[key].values,
+    state.yearlyRatios.returnRelated.values[key].threeYrCAGR =
+      formatter.roundDecimals(
+        calcGrowth.compoundAnnual(
+          state.yearlyRatios.returnRelated.values[key].values,
+          3
+        ),
         3
-      ),
-      3
-    );
+      );
   }
 
   // 5 year CAGR
-  for (let key in state.yearlyRatios.perShareRelated) {
+  for (let key in state.yearlyRatios.perShareRelated.values) {
     if (key === "years") return;
-    state.yearlyRatios.perShareRelated[key].fiveYrCAGR =
+    state.yearlyRatios.perShareRelated.values[key].fiveYrCAGR =
       formatter.roundDecimals(
         calcGrowth.compoundAnnual(
-          state.yearlyRatios.perShareRelated[key].values,
+          state.yearlyRatios.perShareRelated.values[key].values,
           5
         ),
         3
       );
   }
-  for (let key in state.yearlyRatios.returnRelated) {
+  for (let key in state.yearlyRatios.returnRelated.values) {
     if (key === "years") return;
-    state.yearlyRatios.returnRelated[key].fiveYrCAGR = formatter.roundDecimals(
-      calcGrowth.compoundAnnual(
-        state.yearlyRatios.returnRelated[key].values,
-        5
-      ),
-      3
-    );
+    state.yearlyRatios.returnRelated.values[key].fiveYrCAGR =
+      formatter.roundDecimals(
+        calcGrowth.compoundAnnual(
+          state.yearlyRatios.returnRelated.values[key].values,
+          5
+        ),
+        3
+      );
   }
-
-  console.log(state.yearlyRatios);
 };
 
 const createPerShareRatios = (data) => {
   return {
-    years: data.income.years,
+    years: data.income.values.years,
     EPS: {
       name: "EPS",
       values: calcRatio.additionalNumeratorOperand["-"](
-        data.income.netIncome,
-        data.cashFlow.dividendPayoutPreferred,
-        data.balanceSheet.sharesOutstanding
+        data.income.values.netIncome,
+        data.cashFlow.values.dividendPayoutPreferred,
+        data.balanceSheet.values.sharesOutstanding
       ).map((val) => formatter.roundDecimals(val)),
     },
     BPS: {
       name: "BPS",
       values: calcRatio
         .basic(
-          data.balanceSheet.totalEquity,
-          data.balanceSheet.sharesOutstanding
+          data.balanceSheet.values.totalEquity,
+          data.balanceSheet.values.sharesOutstanding
         )
         .map((val) => formatter.roundDecimals(val)),
     },
     TBVPS: {
       name: "EPS",
       values: calcRatio.additionalNumeratorOperand["-"](
-        data.balanceSheet.totalEquity,
-        data.balanceSheet.intangibleAssets,
-        data.balanceSheet.sharesOutstanding
+        data.balanceSheet.values.totalEquity,
+        data.balanceSheet.values.intangibleAssets,
+        data.balanceSheet.values.sharesOutstanding
       ).map((val) => formatter.roundDecimals(val)),
     },
     FCFPS: {
       name: "FCF per Share",
       values: calcRatio.additionalNumeratorOperand["-"](
-        data.cashFlow.operatingCashflow,
-        data.cashFlow.capitalExpenditures,
-        data.balanceSheet.sharesOutstanding
+        data.cashFlow.values.operatingCashflow,
+        data.cashFlow.values.capitalExpenditures,
+        data.balanceSheet.values.sharesOutstanding
       ).map((val) => formatter.roundDecimals(val)),
     },
   };
@@ -336,45 +359,54 @@ const createPerShareRatios = (data) => {
 
 const createRetunRatios = (data) => {
   return {
-    years: data.income.years,
+    years: data.income.values.years,
     operatingMargin: {
       name: "Operating Margin",
       values: calcRatio
-        .basic(data.income.operatingIncome, data.income.totalRevenue)
+        .basic(
+          data.income.values.operatingIncome,
+          data.income.values.totalRevenue
+        )
         .map((val) => formatter.roundDecimals(val)),
     },
     ebitMargin: {
       name: "EBIT Matrgin",
       values: calcRatio
-        .basic(data.income.ebit, data.income.totalRevenue)
+        .basic(data.income.values.ebit, data.income.values.totalRevenue)
         .map((val) => formatter.roundDecimals(val)),
     },
     ROE: {
       name: "ROE",
       values: calcRatio.additionalNumeratorOperand["-"](
-        data.income.netIncome,
-        data.cashFlow.dividendPayoutPreferred,
-        data.balanceSheet.totalEquity
+        data.income.values.netIncome,
+        data.cashFlow.values.dividendPayoutPreferred,
+        data.balanceSheet.values.totalEquity
       ).map((val) => formatter.roundDecimals(val)),
     },
     ROA: {
       name: "ROA",
       values: calcRatio
-        .basic(data.income.netIncome, data.balanceSheet.totalAssets)
+        .basic(
+          data.income.values.netIncome,
+          data.balanceSheet.values.totalAssets
+        )
         .map((val) => formatter.roundDecimals(val)),
     },
     ROCE: {
       name: "ROCE",
       values: calcRatio.additionalDenominatorOperand["+"](
-        data.income.ebit,
-        data.balanceSheet.totalEquity,
-        data.balanceSheet.longTermLiabilities
+        data.income.values.ebit,
+        data.balanceSheet.values.totalEquity,
+        data.balanceSheet.values.longTermLiabilities
       ).map((val) => formatter.roundDecimals(val)),
     },
     cashConversion: {
       name: "Cash Conversion",
       values: calcRatio
-        .basic(data.cashFlow.operatingCashflow, data.income.netIncome)
+        .basic(
+          data.cashFlow.values.operatingCashflow,
+          data.income.values.netIncome
+        )
         .map((val) => formatter.roundDecimals(val)),
     },
   };
@@ -382,13 +414,13 @@ const createRetunRatios = (data) => {
 
 const createDebtRatios = (data) => {
   return {
-    years: data.income.years,
+    years: data.income.values.years,
     debtToEquity: {
       name: "Debt-to-Equity",
       values: calcRatio
         .basic(
-          data.balanceSheet.totalLiabilities,
-          data.balanceSheet.totalEquity
+          data.balanceSheet.values.totalLiabilities,
+          data.balanceSheet.values.totalEquity
         )
         .map((val) => formatter.roundDecimals(val)),
     },
@@ -396,8 +428,8 @@ const createDebtRatios = (data) => {
       name: "Debt-to-Total Assets",
       values: calcRatio
         .basic(
-          data.balanceSheet.totalLiabilities,
-          data.balanceSheet.totalAssets
+          data.balanceSheet.values.totalLiabilities,
+          data.balanceSheet.values.totalAssets
         )
         .map((val) => formatter.roundDecimals(val)),
     },
@@ -405,23 +437,23 @@ const createDebtRatios = (data) => {
       name: "Current Ratio",
       values: calcRatio
         .basic(
-          data.balanceSheet.totalCurrentAssets,
-          data.balanceSheet.totalCurrentLiabilities
+          data.balanceSheet.values.totalCurrentAssets,
+          data.balanceSheet.values.totalCurrentLiabilities
         )
         .map((val) => formatter.roundDecimals(val)),
     },
     quickRatio: {
       name: "Quick Ratio",
       values: calcRatio.additionalNumeratorOperand["-"](
-        data.balanceSheet.totalCurrentAssets,
-        data.balanceSheet.inventory,
-        data.balanceSheet.totalCurrentLiabilities
+        data.balanceSheet.values.totalCurrentAssets,
+        data.balanceSheet.values.inventory,
+        data.balanceSheet.values.totalCurrentLiabilities
       ).map((val) => formatter.roundDecimals(val)),
     },
     interestCover: {
       name: "Interest Cover",
       values: calcRatio
-        .basic(data.income.ebit, data.income.interestExpense)
+        .basic(data.income.values.ebit, data.income.values.interestExpense)
         .map((val) => formatter.roundDecimals(val)),
     },
   };
