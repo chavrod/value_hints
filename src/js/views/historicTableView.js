@@ -46,7 +46,7 @@ class historicTableView {
       <tr class="text-center border-y-2 border-indigo-500">
         <th>${rowName}</th>
         ${rowCells}
-        <canvas>${rowChart}</canvas>
+        <td>${rowChart}</td>
       </tr>
     `;
   }
