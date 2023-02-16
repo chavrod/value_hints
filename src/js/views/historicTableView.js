@@ -41,12 +41,12 @@ class historicTableView {
     `;
   }
 
-  #generateRows(rowName, rowCells) {
+  #generateRows(rowName, rowCells, rowChart) {
     return `
       <tr class="text-center border-y-2 border-indigo-500">
         <th>${rowName}</th>
         ${rowCells}
-        <td>[chart]</td>
+        <canvas>${rowChart}</canvas>
       </tr>
     `;
   }
