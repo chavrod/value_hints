@@ -2,7 +2,7 @@ class historicTableView {
   #parentElement = document.querySelector("[data-page='historic']");
 
   render(data) {
-    const dataEntries = Object.entries(data).map(([__, value]) => value);
+    const dataEntries = Object.entries(data.values).map(([__, value]) => value);
     // Render Headers -> Respective periods
     const periodHeadersMarkup = dataEntries[0]
       .map((perdiod) => this.#generatePeriodHeaders(perdiod))
@@ -19,7 +19,12 @@ class historicTableView {
       })
       .join("");
 
-    const table = this.#generateTable(periodHeadersMarkup, rowsMarkup);
+    const table = this.#generateTable(
+      data.sectionName,
+      data.tableName,
+      periodHeadersMarkup,
+      rowsMarkup
+    );
 
     this.#parentElement.insertAdjacentHTML("afterbegin", table);
   }
@@ -46,12 +51,11 @@ class historicTableView {
     `;
   }
 
-  // -> Add sectionName & tableName as 1st & 2nd args
-  #generateTable(headersData, rowsData) {
+  #generateTable(sectionName, tableName, headersData, rowsData) {
     return `
-      <section class="shadow-lg mx-8 my-4">
+      <section class="shadow-lg mx-8 my-4" data-table="${sectionName}">
         <table class="w-full">
-          <h3 class="font-semibold text-lg m-1">Table Name</h3>
+          <h3 class="font-semibold text-lg m-1">${tableName}</h3>
           <thead>
             <tr class="bg-slate-200">
               <th></th>
